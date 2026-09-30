@@ -1,0 +1,17 @@
+export const qr = {
+    list: "qr",
+    lotes: "qr/lotes",
+    generar: "qr/generar",
+    findByLote: "qr/lote/{loteId}",
+    pdf: "qr/pdf/{loteId}",
+    findByProducto: "qr/tipo-medio/{productoId}",
+    disponibles: "qr/disponibles/{productoId}",
+    findById: "qr/{id}",
+    findByCodigo: "qr/codigo/{codigo}",
+    usar: "qr/usar/{codigo}",
+    delete: "qr/{id}",
+    deleteMultiple: "qr/elementos/multiples",
+    deleteLote: "qr/lote/{loteId}",
+    anular: "qr/{id}/anular",
+    anularMultiple: "qr/anular/elementos/multiples",
+};

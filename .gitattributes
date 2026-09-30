@@ -1,0 +1,64 @@
+# ==========================================
+# CONFIGURACIÓN GLOBAL
+# ==========================================
+
+# Detectar automáticamente archivos de texto y normalizar a LF
+* text=auto
+
+# ==========================================
+# ARCHIVOS DE CÓDIGO FUENTE → LF
+# ==========================================
+
+*.js      text eol=lf
+*.jsx     text eol=lf
+*.ts      text eol=lf
+*.tsx     text eol=lf
+*.json    text eol=lf
+*.css     text eol=lf
+*.scss    text eol=lf
+*.html    text eol=lf
+*.svg     text eol=lf
+*.xml     text eol=lf
+*.yml     text eol=lf
+*.yaml    text eol=lf
+*.md      text eol=lf
+*.sh      text eol=lf
+*.py      text eol=lf
+*.php     text eol=lf
+*.sql     text eol=lf
+
+# ==========================================
+# ARCHIVOS DE CONFIGURACIÓN → LF
+# ==========================================
+
+.*        text eol=lf
+.env*     text eol=lf
+Dockerfile text eol=lf
+*.conf    text eol=lf
+*.ini     text eol=lf
+
+# ==========================================
+# ARCHIVOS BINARIOS → SIN CONVERSIÓN
+# ==========================================
+
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.ico     binary
+*.webp    binary
+*.pdf     binary
+*.zip     binary
+*.tar.gz  binary
+*.gz      binary
+*.7z      binary
+*.woff    binary
+*.woff2   binary
+*.ttf     binary
+*.eot     binary
+*.otf     binary
+*.mp3     binary
+*.mp4     binary
+*.webm    binary
+*.exe     binary
+*.dll     binary

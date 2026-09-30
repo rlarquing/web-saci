@@ -1,0 +1,26 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Estas URLs quedan EMBEBIDAS en el bundle durante el build.
+        # Compose las interpola desde el archivo .env de esta carpeta (no lee .env.local).
+        # Si el API corre en otro contenedor: http://api:3000/api/
+        - API_URL=${API_URL:-http://srv895496.hstgr.cloud:3003/api/}
+        # URL pública del API — DEBE ser alcanzable desde el navegador del usuario
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://srv895496.hstgr.cloud:3003/api/}
+    container_name: sacp-web
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      # Solo afecta al código de servidor; el cliente usa los valores fijados en el build.
+      - API_URL=${API_URL:-http://srv895496.hstgr.cloud:3003/api/}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://srv895496.hstgr.cloud:3003/api/}
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:4000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
