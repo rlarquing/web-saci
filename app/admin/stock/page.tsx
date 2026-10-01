@@ -5,6 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { stock, bajoMinimo, selectAlmacenes } from "./services/stock.service";
 import { toast } from "sonner";
+import { Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { descargarCsv } from "@/utilities";
 
 const DataTable = dynamic(
   () => import("@/components/DataTable/data-table.component").then(mod => mod.DataTable),
@@ -55,7 +58,25 @@ export default function StockPage() {
                 </CardContent>
             </Card>
             <Card>
-                <CardHeader><CardTitle>Stock actual (derivado de movimientos)</CardTitle></CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle>Stock actual (derivado de movimientos)</CardTitle>
+                    <Button
+                        variant="outline"
+                        onClick={async () => {
+                            try {
+                                await descargarCsv(
+                                    "movimiento-inventario/stock/exportar",
+                                    "stock-inventario.csv",
+                                    almacenId ? { almacenId } : undefined,
+                                );
+                            } catch (e: any) {
+                                toast.error(e?.message || "Error al exportar el stock");
+                            }
+                        }}
+                    >
+                        <Download className="mr-1 h-4 w-4" /> Exportar CSV
+                    </Button>
+                </CardHeader>
                 <CardContent>
                     <DataTable
                         title={'Stock'}

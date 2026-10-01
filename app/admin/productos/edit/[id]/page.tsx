@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { productos } from "../../routers/producto.router";
 import { update, selectNomenclador } from "../../services/producto.service";
+import { FotoProducto } from "../../components/foto-producto.component";
 import { get } from "@/utilities";
 import { producto } from "../../endpoints/producto.endpoint";
 
@@ -20,6 +21,7 @@ export default function EditProducto() {
     const id = params?.id;
     const [categorias, setCategorias] = useState<any[]>([]);
     const [unidades, setUnidades] = useState<any[]>([]);
+    const [tieneFoto, setTieneFoto] = useState(false);
     const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm<any>();
 
     useEffect(() => {
@@ -28,6 +30,7 @@ export default function EditProducto() {
             setUnidades(await selectNomenclador('unidad'));
             const data = await get(producto.get.replace('{id}', id), true);
             if (data?.obj) {
+                setTieneFoto(data.obj.hasFoto === true || data.obj.hasFoto === 'Si');
                 reset({
                     nombre: data.obj.nombre,
                     descripcion: data.obj.descripcion,
@@ -54,6 +57,9 @@ export default function EditProducto() {
             <Card>
                 <CardHeader><CardTitle>Editar producto</CardTitle></CardHeader>
                 <CardContent>
+                    <div className="mb-5 border-b pb-5">
+                        <FotoProducto id={id} tieneFoto={tieneFoto} />
+                    </div>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                         <div className="space-y-1">
                             <Label htmlFor="nombre">Nombre</Label>

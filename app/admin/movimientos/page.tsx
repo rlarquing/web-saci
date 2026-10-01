@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import { findAll } from "./services/movimiento.service";
 import { FormMovimiento } from "./components/form-movimiento.component";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
+import { toast } from "sonner";
+import { descargarCsv } from "@/utilities";
 
 const DataTable = dynamic(
   () => import("@/components/DataTable/data-table.component").then(mod => mod.DataTable),
@@ -23,7 +27,21 @@ export default function MovimientosPage() {
     return (
         <div className="space-y-6 p-2">
             <Card>
-                <CardHeader><CardTitle>Kardex de movimientos</CardTitle></CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle>Kardex de movimientos</CardTitle>
+                    <Button
+                        variant="outline"
+                        onClick={async () => {
+                            try {
+                                await descargarCsv("movimiento-inventario/exportar", "movimientos-inventario.csv");
+                            } catch (e: any) {
+                                toast.error(e?.message || "Error al exportar el kardex");
+                            }
+                        }}
+                    >
+                        <Download className="mr-1 h-4 w-4" /> Exportar CSV
+                    </Button>
+                </CardHeader>
                 <CardContent>
                     <DataTable
                         title={'Kardex'}

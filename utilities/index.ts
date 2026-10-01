@@ -13,3 +13,4 @@ export * from './delete.utility';
 export * from './get-user-logged.utility';
 export * from './quitar-seperador.utility';
 export * from './format-validation-errors.utility';
+export * from './descargar-csv.utility';
