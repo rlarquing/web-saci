@@ -59,7 +59,7 @@ export function Logo({ className = "", size = "md", showText = false, variant = 
                         Sistema Automatizado
                     </h1>
                     <p className={`${textSizeMap[size].subtitle} ${textStyleMap[variant].subtitle} font-medium`}>
-                        de Control de Almacenes
+                        de Control de Inventarios
                     </p>
                 </div>
             )}

@@ -1,13 +1,13 @@
 {
   "id": "/",
   "name": "SACI — Control de Inventarios QR",
-  "short_name": "SACI — Control de Inventarios QR",
-  "description": "Web para el control de los parqueos usando un sistema de qr",
+  "short_name": "SACI",
+  "description": "Sistema Automatizado de Control de Inventarios con etiquetas QR reutilizables",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "theme_color": "#0F766E",
   "icons": [
     {
       "src": "/icon-192x192.png",
