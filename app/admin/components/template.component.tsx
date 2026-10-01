@@ -18,6 +18,7 @@ const DRAWER_WIDTH = 270;
 const DRAWER_WIDTH_CLOSED = 72;
 
 const DropdownMenu = dynamic(() => import('../../../components/Menu/dropdown-menu.component'));
+const CampanaNotificaciones = dynamic(() => import('./campana-notificaciones.component'));
 
 interface Props {
     children: React.ReactNode;
@@ -142,7 +143,10 @@ export function Template({ children, title }: Props) {
                         <Logo size="md" showText variant="dark" />
                     </div>
 
-                    <DropdownMenu iconColor="#1f2937" showAdminMenu={true} showDashboardMenu={false} />
+                    <div className="flex items-center gap-1 sm:gap-2">
+                        <CampanaNotificaciones />
+                        <DropdownMenu iconColor="#1f2937" showAdminMenu={true} showDashboardMenu={false} />
+                    </div>
                 </header>
 
                 <aside

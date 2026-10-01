@@ -37,6 +37,7 @@ export default function EditProducto() {
                     categoriaId: data.obj.categoriaId,
                     unidadId: data.obj.unidadId,
                     stockMinimo: data.obj.stockMinimo,
+                    stockSeguridad: data.obj.stockSeguridad ?? 0,
                 });
             }
         })();
@@ -83,10 +84,19 @@ export default function EditProducto() {
                                 </select>
                             </div>
                         </div>
-                        <div className="space-y-1">
-                            <Label htmlFor="stockMinimo">Stock mínimo (alerta)</Label>
-                            <Input id="stockMinimo" type="number" min={0} {...register("stockMinimo")} />
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div className="space-y-1">
+                                <Label htmlFor="stockMinimo">Stock mínimo global (alerta)</Label>
+                                <Input id="stockMinimo" type="number" min={0} {...register("stockMinimo")} />
+                            </div>
+                            <div className="space-y-1">
+                                <Label htmlFor="stockSeguridad">Stock de seguridad global</Label>
+                                <Input id="stockSeguridad" type="number" min={0} {...register("stockSeguridad")} />
+                            </div>
                         </div>
+                        <p className="text-xs text-muted-foreground">
+                            Punto de reorden = mínimo + seguridad. Para umbrales por almacén usa el módulo «Niveles».
+                        </p>
                         <div className="flex gap-2 justify-end">
                             <Button type="button" variant="outline" onClick={() => router.push(productos.index)}>Cancelar</Button>
                             <Button type="submit" disabled={isSubmitting}>Guardar</Button>

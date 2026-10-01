@@ -7,7 +7,7 @@ import Link from "next/link";
 import {useEffect, useState} from "react";
 import {productos} from "./routers/producto.router";
 import {Button} from "@/components/ui/button";
-import {Edit, Plus} from "lucide-react";
+import {Edit, Eye, Plus} from "lucide-react";
 import {createColumns} from "@/components/DataTable/data-table.component";
 
 const DataTable = dynamic(
@@ -58,9 +58,14 @@ export default function Index() {
     const actions: any = {
         field: 'action', headerName: 'Acciones', flex: 1,
         renderCell: (row: any) => (
-            <Link href={`${productos.edit.replace('[id]', row.id)}`}>
-                <Button variant="ghost" size="icon"><Edit className="h-4 w-4" /></Button>
-            </Link>
+            <div className="flex items-center gap-1">
+                <Link href={`${productos.show.replace('[id]', row.id)}`}>
+                    <Button variant="ghost" size="icon" title="Ver timeline"><Eye className="h-4 w-4" /></Button>
+                </Link>
+                <Link href={`${productos.edit.replace('[id]', row.id)}`}>
+                    <Button variant="ghost" size="icon"><Edit className="h-4 w-4" /></Button>
+                </Link>
+            </div>
         )
     };
 
@@ -91,8 +96,8 @@ export default function Index() {
             },
         },
         ...createColumns(
-            ['codigo', 'nombre', 'categoriaNombre', 'unidadNombre', 'stockMinimo'],
-            ['Código', 'Nombre', 'Categoría', 'Unidad', 'Stock mínimo'],
+            ['codigo', 'nombre', 'categoriaNombre', 'unidadNombre', 'stockMinimo', 'stockSeguridad'],
+            ['Código', 'Nombre', 'Categoría', 'Unidad', 'Stock mínimo', 'Stock seguridad'],
         ),
         {
             id: 'actions',

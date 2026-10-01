@@ -3,12 +3,27 @@ import { io, Socket } from 'socket.io-client';
 type MenuChangeCallback = (data: { action: string; menuId: string; userId: string; timestamp: string }) => void;
 type QrEstadoCallback = (data: { qrCodigo: string; estado: 'disponible' | 'usado'; almacenId?: string; timestamp: string }) => void;
 type MovimientoChangeCallback = (data: { tipo: 'entrada' | 'salida' | 'revocada'; almacenId?: string; movimientoId?: string; timestamp: string }) => void;
+type NotificacionCallback = (data: {
+    tipo: 'BAJO_MINIMO' | 'REORDEN';
+    productoId: string;
+    productoCodigo: string;
+    productoNombre: string;
+    almacenId: string;
+    almacenNombre: string;
+    stock: number;
+    stockMinimo: number;
+    stockSeguridad: number;
+    puntoReorden: number;
+    sugerido: number;
+    timestamp: string;
+}) => void;
 
 class SocketService {
     private socket: Socket | null = null;
     private menuChangeCallbacks: MenuChangeCallback[] = [];
     private qrEstadoCallbacks: QrEstadoCallback[] = [];
     private movimientoChangeCallbacks: MovimientoChangeCallback[] = [];
+    private notificacionCallbacks: NotificacionCallback[] = [];
 
     /**
      * Deriva la URL del socket desde API_URL (le saca /api/ del final)
@@ -79,6 +94,12 @@ class SocketService {
             console.log('[Socket] Evento movimiento:change recibido:', data);
             this.movimientoChangeCallbacks.forEach((cb) => cb(data));
         });
+
+        // Push de umbrales de stock (campana — backlog P2)
+        this.socket.on('notificacion', (data: any) => {
+            console.log('[Socket] Evento notificacion recibido:', data);
+            this.notificacionCallbacks.forEach((cb) => cb(data));
+        });
     }
 
     /**
@@ -120,6 +141,16 @@ class SocketService {
         this.movimientoChangeCallbacks.push(callback);
         return () => {
             this.movimientoChangeCallbacks = this.movimientoChangeCallbacks.filter((cb) => cb !== callback);
+        };
+    }
+
+    /**
+     * Registra un callback para push de umbrales de stock (BAJO_MINIMO/REORDEN)
+     */
+    onNotificacion(callback: NotificacionCallback): () => void {
+        this.notificacionCallbacks.push(callback);
+        return () => {
+            this.notificacionCallbacks = this.notificacionCallbacks.filter((cb) => cb !== callback);
         };
     }
 

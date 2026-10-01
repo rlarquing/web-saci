@@ -42,19 +42,32 @@ export default function StockPage() {
         <div className="space-y-6 p-2">
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Alertas de stock bajo mínimo</CardTitle>
+                    <CardTitle>Alertas de stock (punto de reorden)</CardTitle>
                     <select className="rounded-md border p-2" value={almacenId} onChange={(e) => setAlmacenId(e.target.value)}>
                         <option value="">Todos los almacenes</option>
                         {almacenes.map((a) => <option key={a.value} value={a.value}>{a.label}</option>)}
                     </select>
                 </CardHeader>
-                <CardContent className="flex flex-wrap gap-2">
+                <CardContent>
                     {alertas.length === 0 && <span className="text-sm text-muted-foreground">Sin alertas 🎉</span>}
-                    {alertas.map((a, i) => (
-                        <Badge key={i} variant="destructive">
-                            {a.productoCodigo} {a.productoNombre} · {a.stock}/{a.stockMinimo} @ {a.almacenNombre}
-                        </Badge>
-                    ))}
+                    <div className="flex flex-col gap-2">
+                        {alertas.map((a, i) => (
+                            <div key={i} className="flex flex-wrap items-center gap-2 rounded-md border px-3 py-2">
+                                <Badge variant={a.estado === "BAJO_MINIMO" ? "destructive" : "secondary"}>
+                                    {a.estado === "BAJO_MINIMO" ? "BAJO MÍNIMO" : "REORDEN"}
+                                </Badge>
+                                <span className="text-sm font-medium">{a.productoCodigo} {a.productoNombre}</span>
+                                <span className="text-sm text-muted-foreground">
+                                    stock {a.stock} · reorden {a.puntoReorden ?? a.stockMinimo} @ {a.almacenNombre}
+                                </span>
+                                {(a.sugerido ?? 0) > 0 && (
+                                    <Badge variant="outline" className="ml-auto">
+                                        reponer ≈ {a.sugerido}
+                                    </Badge>
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </CardContent>
             </Card>
             <Card>
