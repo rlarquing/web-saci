@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
 import { descargarCsv } from "@/utilities";
+import { createColumns } from "@/components/DataTable/data-table.component";
+import { formatFechaHumanaConHora } from "@/utilities/format-date.utility";
 
 const DataTable = dynamic(
   () => import("@/components/DataTable/data-table.component").then(mod => mod.DataTable),
@@ -23,6 +25,26 @@ export default function MovimientosPage() {
             setData(await findAll(paginationModel.pageSize, paginationModel.page + 1));
         })();
     }, [paginationModel]);
+
+    // Columnas explícitas: el kardex devuelve ReadMovimientoInventarioDto (sin
+    // header/key del API), así que hay que declararlas aquí e incluir la nueva
+    // columna «Lote» del P3 (— cuando el movimiento no tiene lote).
+    const columns = [
+        ...createColumns(
+            ['tipo', 'productoCodigo', 'productoNombre', 'cantidad', 'almacenNombre', 'almacenDestinoNombre', 'userName', 'saldoResultante', 'observaciones'],
+            ['Tipo', 'SKU', 'Producto', 'Cantidad', 'Almacén', 'Destino', 'Usuario', 'Saldo', 'Observaciones'],
+        ),
+        {
+            accessorKey: 'fecha',
+            header: 'Fecha',
+            cell: ({ row }: { row: any }) => formatFechaHumanaConHora(row.original.fecha),
+        },
+        {
+            accessorKey: 'lote',
+            header: 'Lote',
+            cell: ({ row }: { row: any }) => row.original.lote || '—',
+        },
+    ];
 
     return (
         <div className="space-y-6 p-2">
@@ -46,6 +68,7 @@ export default function MovimientosPage() {
                     <DataTable
                         title={'Kardex'}
                         data={data}
+                        columns={columns as any}
                         paginationModel={paginationModel}
                         onPaginationModelChange={setPaginationModel}
                         headerBackground='#f3f0f2'

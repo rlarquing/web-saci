@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { descargarCsv } from "@/utilities";
+import { createColumns } from "@/components/DataTable/data-table.component";
 
 const DataTable = dynamic(
   () => import("@/components/DataTable/data-table.component").then(mod => mod.DataTable),
@@ -30,13 +31,27 @@ export default function StockPage() {
         (async (): Promise<void> => {
             try {
                 const rows = await stock(almacenId || undefined);
-                setFilas({ data: rows });
+                setFilas(rows);
                 setAlertas(await bajoMinimo(almacenId || undefined));
             } catch {
                 toast.error('No se pudo cargar el stock');
             }
         })();
     }, [almacenId]);
+
+    // Columnas explícitas: el API devuelve un array plano (sin header/key), así
+    // que hay que declararlas aquí. El bin (ubicacionNombre) llega desde el P3.
+    const columns = [
+        ...createColumns(
+            ['productoCodigo', 'productoNombre', 'almacenNombre', 'stock'],
+            ['SKU', 'Producto', 'Almacén', 'Stock'],
+        ),
+        {
+            accessorKey: 'ubicacionNombre',
+            header: 'Bin',
+            cell: ({ row }: { row: any }) => row.original.ubicacionNombre || '—',
+        },
+    ];
 
     return (
         <div className="space-y-6 p-2">
@@ -94,6 +109,7 @@ export default function StockPage() {
                     <DataTable
                         title={'Stock'}
                         data={filas}
+                        columns={columns as any}
                         headerBackground='#f3f0f2'
                         headerColor='#0f766e'
                     />

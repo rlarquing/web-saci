@@ -7,4 +7,6 @@ export const producto = {
     search: "producto/buscar",
     delete_many: "producto/elementos/multiples",
     by_codigo: "producto/codigo/{codigo}",
+    variantes: "producto/{id}/variantes",
+    atributos: "producto/{id}/atributos",
 };
